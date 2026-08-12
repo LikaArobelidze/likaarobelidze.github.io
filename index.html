@@ -210,7 +210,7 @@
   /* ---------------- motion ---------------- */
   .clips { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: clamp(.8rem, 1.6vw, 1.4rem); }
   .clip { margin: 0; }
-  .clip video { width: 100%; height: auto; background: var(--panel); box-shadow: var(--shadow); }
+  .clip video { width: 100%; height: auto; background: var(--panel); box-shadow: var(--shadow); display: block; }
   .clip figcaption { margin-top: .55rem; font-size: var(--fs-cap); color: var(--muted); }
 
   /* ---------------- closing ---------------- */
@@ -828,14 +828,14 @@
   </section>
 
   <section class="wrap series" id="motion">
-<div class="series__head"><h2>In Motion</h2><p>Short films from the same trips - the frames that only work when they move.</p><span class="series__count">6 films</span></div>
+<div class="series__head"><h2>In Motion</h2><p>Moving photographs from the same trips. They play without sound.</p><span class="series__count">6 films</span></div>
 <div class="clips">
-<figure class="clip"><video src="assets/video/clip-01.mp4" controls preload="metadata" playsinline></video><figcaption>Short film 01</figcaption></figure>
-<figure class="clip"><video src="assets/video/clip-02.mp4" controls preload="metadata" playsinline></video><figcaption>Short film 02</figcaption></figure>
-<figure class="clip"><video src="assets/video/clip-03.mp4" controls preload="metadata" playsinline></video><figcaption>Short film 03</figcaption></figure>
-<figure class="clip"><video src="assets/video/clip-04.mp4" controls preload="metadata" playsinline></video><figcaption>Short film 04</figcaption></figure>
-<figure class="clip"><video src="assets/video/clip-05.mp4" controls preload="metadata" playsinline></video><figcaption>Short film 05</figcaption></figure>
-<figure class="clip"><video src="assets/video/clip-06.mp4" controls preload="metadata" playsinline></video><figcaption>Short film 06</figcaption></figure>
+<figure class="clip"><video src="assets/video/clip-01.mp4" muted loop playsinline preload="metadata" aria-label="Short film 01, silent"></video><figcaption>Short film 01</figcaption></figure>
+<figure class="clip"><video src="assets/video/clip-02.mp4" muted loop playsinline preload="metadata" aria-label="Short film 02, silent"></video><figcaption>Short film 02</figcaption></figure>
+<figure class="clip"><video src="assets/video/clip-03.mp4" muted loop playsinline preload="metadata" aria-label="Short film 03, silent"></video><figcaption>Short film 03</figcaption></figure>
+<figure class="clip"><video src="assets/video/clip-04.mp4" muted loop playsinline preload="metadata" aria-label="Short film 04, silent"></video><figcaption>Short film 04</figcaption></figure>
+<figure class="clip"><video src="assets/video/clip-05.mp4" muted loop playsinline preload="metadata" aria-label="Short film 05, silent"></video><figcaption>Short film 05</figcaption></figure>
+<figure class="clip"><video src="assets/video/clip-06.mp4" muted loop playsinline preload="metadata" aria-label="Short film 06, silent"></video><figcaption>Short film 06</figcaption></figure>
 </div></section>
 
 
@@ -925,6 +925,27 @@
         });
       }, { rootMargin: '0px 0px -6% 0px' });
       shots.forEach(function (el) { io.observe(el); });
+    }
+
+    /* films: silent, and only running while they are on screen */
+    var clips = Array.prototype.slice.call(document.querySelectorAll('.clip video'));
+    if (clips.length) {
+      if (reduce || !('IntersectionObserver' in window)) {
+        clips.forEach(function (v) { v.setAttribute('controls', ''); });
+      } else {
+        var vio = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            var v = e.target;
+            if (e.isIntersecting) {
+              var p = v.play();
+              if (p && p.catch) { p.catch(function () { v.setAttribute('controls', ''); }); }
+            } else if (!v.paused) {
+              v.pause();
+            }
+          });
+        }, { threshold: 0.35 });
+        clips.forEach(function (v) { v.muted = true; vio.observe(v); });
+      }
     }
 
     /* lightbox */
