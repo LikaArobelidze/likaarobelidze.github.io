@@ -216,6 +216,7 @@
   /* ---------------- closing ---------------- */
   .closing { padding-block: clamp(3rem, 8vh, 6rem); border-top: 1px solid var(--line); scroll-margin-top: 3.5rem; }
   .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(255px, 1fr)); gap: clamp(1.8rem, 4vw, 3.5rem); }
+  #published { scroll-margin-top: 4.5rem; }
   .cols h3 { font-family: var(--display); font-weight: 400; font-size: var(--fs-h3); margin: .8rem 0 .5rem; }
   .cols p { margin: 0 0 .6rem; color: var(--text-2); font-size: var(--fs-cap); max-width: 40ch; }
   .cols ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .5rem; font-size: var(--fs-cap); color: var(--text-2); }
@@ -277,6 +278,7 @@
     <a href="#riviera">C&#244;te d'Azur</a>
     <a href="#elsewhere">Elsewhere</a>
     <a href="#motion">Motion</a>
+    <a href="#published" class="keep">Published</a>
     <a href="#contact" class="keep">Contact</a>
   </nav>
 </header>
@@ -841,7 +843,7 @@
 
   <section class="wrap closing" id="contact">
     <div class="cols">
-      <div>
+      <div id="published">
         <span class="label">Where the work lives</span>
         <h3>Published &amp; recognised</h3>
         <ul>
